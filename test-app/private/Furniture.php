@@ -1,38 +1,28 @@
 <?php
 
-namespace MyApp\classes;
-use MyApp\classes\Product;
-
-class Furniture extends Product {
-  static protected $columns = ['id', 'sku', 'name', 'price', 'dimensions'];
-
-  public function save() {
-    $attributes = $this->sanitized_attributes();
-    $sql = "INSERT INTO products (";
-    $sql .= join(', ', array_keys($attributes));
-    $sql .= ") VALUES (";
-    $sql .= "'" . $this->sku . "', ";
-    $sql .= "'" . $this->name . "', ";
-    $sql .= "'" . $this->price . "', ";
-    $sql .= "'[" . $this->height . ", "; 
-    $sql .= $this->width . ", ";
-    $sql .= $this->length . "]'";
-    $sql .= ")";
-    $result = self::$database->query($sql);
-    if($result) {
-      $this->id = self::$database->insert_id;
+class Furniture extends Product{
+    
+    public function setValues($sku, $name, $price, $size, $height, $width, $length, $weight){
+        $this->sku = $sku;
+        $this->name = $name;
+        $this->price = $price;
+        $this->size = $size;
+        $this->height = $height;
+        $this->width = $width;
+        $this->length = $length;
+        $this->weight = $weight;
     }
-    return $result;
-  }
 
-  public function __construct($args=[]) {
-    $this->sku = $args['sku'] ?? '';
-    $this->name = $args['name'] ?? '';
-    $this->price = $args['price'] ?? '';
-    $this->width = $args['width'] ?? '';
-    $this->length = $args['length'] ?? '';
-    $this->height = $args['height'] ?? '';
-  }
-}
+    public function getInfo(){
+         echo '<div class="card-box-order-mine p-2 bd-highlight">';
+         echo '<input class="delete-checkbox" type="checkbox" name="delete[]" value='.$this->sku.'>';
+         echo '<p>'.$this->sku.'</p>';
+         echo '<p>'. $this->name.'</p>';
+         echo '<p>'.$this->price.'.00 $</p>';
+         echo '<p>Dimension: '.$this->height.'x'.$this->width.'x'.$this->length.'</p>';
+         echo '</div>';
 
+
+    }
+};
 ?>
